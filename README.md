@@ -169,32 +169,32 @@ training script:
   to parallelize the training of your deep learning models across
   multiple GPUs.
 
-      ```
-      for epoch in range(num_epochs):
-      train_loader.sampler.set_epoch(epoch)
-      running_loss = 0.0
-      for i, data in enumerate(train_loader):
-      inputs, labels = data
-      inputs, labels = inputs.to(local_rank), labels.to(local_rank)
-      optimizer.zero_grad()
-      outputs = model(inputs)
-      loss = criterion(outputs, labels)
-      loss.backward()
-      optimizer.step()
-      running_loss += loss.item()
-      ```
+    ```
+    for epoch in range(num_epochs):
+    train_loader.sampler.set_epoch(epoch)
+    running_loss = 0.0
+    for i, data in enumerate(train_loader):
+    inputs, labels = data
+    inputs, labels = inputs.to(local_rank), labels.to(local_rank)
+    optimizer.zero_grad()
+    outputs = model(inputs)
+    loss = criterion(outputs, labels)
+    loss.backward()
+    optimizer.step()
+    running_loss += loss.item()
+    ```
 
-      In distributed training, each process will have its own instance of
-      the data loader, and the sampler will ensure that each process gets a
-      different subset of the data to train on. By setting the epoch for the
-      sampler, we ensure that each process gets a different set of data
-      samples in each epoch, which helps to improve the diversity of the
-      data seen by the model during training. We can do that by
-      using `train_loader.sampler.set_epoch(epoch)` on each epoch.
+    In distributed training, each process will have its own instance of
+    the data loader, and the sampler will ensure that each process gets a
+    different subset of the data to train on. By setting the epoch for the
+    sampler, we ensure that each process gets a different set of data
+    samples in each epoch, which helps to improve the diversity of the
+    data seen by the model during training. We can do that by
+    using `train_loader.sampler.set_epoch(epoch)` on each epoch.
 
-      The other modification is that `inputs` and `labels` are now being moved
-      to the GPU that is associated with the current process, which is
-      identified by the `local_rank` variable.
+    The other modification is that `inputs` and `labels` are now being moved
+    to the GPU that is associated with the current process, which is
+    identified by the `local_rank` variable.
 
 ### **Saving data to disk**
 
