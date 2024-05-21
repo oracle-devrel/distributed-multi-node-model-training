@@ -117,16 +117,16 @@ training script:
   shuffle and partition the training dataset across the different
   processes. In our code we wiil define it using the below code:  
     
-      ```
-      train_dataset = CIFAR10(root='./data', train=True,
-      transform=train_transform, download=False)
+    ```
+    train_dataset = CIFAR10(root='./data', train=True,
+    transform=train_transform, download=False)
 
-      train_sampler = DistributedSampler(dataset=train_dataset,
-      shuffle=True, num_replicas=world_size, rank=rank)
+    train_sampler = DistributedSampler(dataset=train_dataset,
+    shuffle=True, num_replicas=world_size, rank=rank)
 
-      train_loader = DataLoader(train_dataset, batch_size=batch_size,
-      sampler=train_sampler)
-      ```
+    train_loader = DataLoader(train_dataset, batch_size=batch_size,
+    sampler=train_sampler)
+    ```
 
   In this code snippet, we are creating a `DistributedSampler` object
   with `num_replicas` set to `world_size` (which is the number of
@@ -143,26 +143,26 @@ training script:
   to parallelize the training of your deep learning models across
   multiple GPUs.
 
-      ```
-      # Create the model
-      model = torch.hub.load('pytorch/vision:v0.10.0', 'resnet18',
-      pretrained=False)
+    ```
+    # Create the model
+    model = torch.hub.load('pytorch/vision:v0.10.0', 'resnet18',
+    pretrained=False)
 
-      # Change model head classifier to dataset num_classes
-      model.fc = nn.Linear(512, 10)
+    # Change model head classifier to dataset num_classes
+    model.fc = nn.Linear(512, 10)
 
-      # Move the model to device
-      model.to(local_rank)
-      model = DistributedDataParallel(model, device_ids=\[local_rank\])
-      ```
+    # Move the model to device
+    model.to(local_rank)
+    model = DistributedDataParallel(model, device_ids=\[local_rank\])
+    ```
 
-      This modification wraps the model with `DistributedDataParallel` to
-      enable distributed training. The `device_ids` argument specifies the GPU
-      that the model will be trained on. Thus, each model replica will run
-      on a different process on its respective GPU, identified
-      by `local_rank.` In our single-node with 4 GPUs case, we have 4 model
-      replicas, each running by 4 different processes and each process is
-      running in a different GPU.
+    This modification wraps the model with `DistributedDataParallel` to
+    enable distributed training. The `device_ids` argument specifies the GPU
+    that the model will be trained on. Thus, each model replica will run
+    on a different process on its respective GPU, identified
+    by `local_rank.` In our single-node with 4 GPUs case, we have 4 model
+    replicas, each running by 4 different processes and each process is
+    running in a different GPU.
 
 - **Training** - In this data parallel training, we will
   use `DistributedDataParallel`, which is a PyTorch module that allows you
