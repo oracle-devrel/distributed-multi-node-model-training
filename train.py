@@ -28,7 +28,7 @@ train_dataset = CIFAR10(root='./data', train=True, transform=train_transform, do
 train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 
 # Create the model
-model = torch.hub.load('pytorch/vision:v0.10.0', 'resnet18', prertained=False)
+model = torch.hub.load('pytorch/vision:v0.10.0', 'resnet18', pretrained=False)
 
 # Change model head classifier to dataset num_classes
 model.fc = nn.Linear(512, 10)
