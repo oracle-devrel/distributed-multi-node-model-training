@@ -143,7 +143,7 @@ export NCCL_SOCKET_IFRAME=eth0
 
 6. Disable ubuntu firewall & allow IPtables configuration based on the port you using in our case it is `12345`
 
-7. Obtain Instance IP Address of your instance and `--master_addr ` update it in below command before executing it:
+7. Obtain Instance IP Address and update `--master_addr `  the command before executing it:
 
 ```bash
 python3 -m torch.distributed.run \\  
